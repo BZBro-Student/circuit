@@ -24,8 +24,11 @@ public class CircuitTracer {
 
 	/** Print instructions for running CircuitTracer from the command line. */
 	private void printUsage() {
-		//TODO: print out clear usage instructions when there are problems with
-		// any command line args
+		System.out.println("To Run The Program Please Follow The Following Argument Structure:");
+		System.out.println("<-StorageType> <-ProgramMode> <InputFileName>");
+		System.out.println("Storage Type Options:\n-s -- uses a stack, DFS\n-q -- uses a queue, BFS");
+		System.out.println("Program Mode Options:\n-c -- runs program in the console\n-g -- runs program in a GUI");
+		System.out.println("Example:\njava CircuitTracer -s -c inputFile.dat");
 	}
 	
 	/** 
