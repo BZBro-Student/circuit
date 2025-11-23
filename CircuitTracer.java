@@ -95,6 +95,20 @@ public class CircuitTracer {
 				stateStore.store(new TraceState(currBoard, startRow, startColumn + 1));
 			}
 
+			while (!stateStore.isEmpty()){
+				TraceState currState = stateStore.retrieve();
+				if (currState.isSolution()){
+					if (bestPaths.isEmpty() || currState.pathLength() == bestPaths.get(0).pathLength()) {
+						bestPaths.add(currState);
+					} else if ( currState.pathLength() < bestPaths.get(0).pathLength()){
+						bestPaths.clear();
+						bestPaths.add(currState);
+					}
+				} else {
+
+				}
+			}
+
 			
 
 		} else if (argTwo == 'g') {
