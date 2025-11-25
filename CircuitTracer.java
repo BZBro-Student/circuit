@@ -49,9 +49,8 @@ public class CircuitTracer {
 			printUsage();
 			return; // exit the constructor immediately
 		}
-		// TODO: initialize the Storage to use either a stack or queue
+		// Storage Selection
 		char argOne = args[0].charAt(1);
-		System.out.println(argOne);
 		if (argOne == 's') {
 			stateStore = Storage.getStackInstance();
 			bestPaths = new ArrayList<TraceState>();
@@ -63,7 +62,7 @@ public class CircuitTracer {
 			printUsage();
 			return;
 		}
-
+		// File Reader
 		String argThree = args[2];
 		try {
 			currBoard = new CircuitBoard(argThree);
@@ -71,17 +70,14 @@ public class CircuitTracer {
 			System.out.println("Given file not found");
 			printUsage();
 			return;
-		};
-
+		}
+		;
+		// Graphics Mode Selection
 		char argTwo = args[1].charAt(1);
-		System.out.println(argTwo);
 		if (argTwo == 'c') {
-			System.out.println("Input Board:");
-			System.out.println(currBoard);
-			System.out.println("######################");
 			Point startPosition = currBoard.getStartingPoint();
-			int startColumn = (int) startPosition.getX();
-			int startRow = (int) startPosition.getY();
+			int startColumn = (int) startPosition.getY();
+			int startRow = (int) startPosition.getX();
 			if (currBoard.isOpen(startRow + 1, startColumn)) {
 				stateStore.store(new TraceState(currBoard, startRow + 1, startColumn));
 			}
@@ -94,23 +90,36 @@ public class CircuitTracer {
 			if (currBoard.isOpen(startRow, startColumn + 1)) {
 				stateStore.store(new TraceState(currBoard, startRow, startColumn + 1));
 			}
-
-			while (!stateStore.isEmpty()){
+			while (!stateStore.isEmpty()) {
 				TraceState currState = stateStore.retrieve();
-				if (currState.isSolution()){
+				if (currState.isSolution()) {
 					if (bestPaths.isEmpty() || currState.pathLength() == bestPaths.get(0).pathLength()) {
 						bestPaths.add(currState);
-					} else if ( currState.pathLength() < bestPaths.get(0).pathLength()){
+					} else if (currState.pathLength() < bestPaths.get(0).pathLength()) {
 						bestPaths.clear();
 						bestPaths.add(currState);
 					}
 				} else {
+					int currStateRow = currState.getRow();
+					int currStateCol = currState.getCol();
+					if (currState.isOpen(currStateRow + 1, currStateCol)) {
+						stateStore.store(new TraceState(currState, currStateRow + 1, currStateCol));
+					}
+					if (currState.isOpen(currStateRow - 1, currStateCol)) {
+						stateStore.store(new TraceState(currState, currStateRow - 1, currStateCol));
+					}
+					if (currState.isOpen(currStateRow, currStateCol + 1)) {
+						stateStore.store(new TraceState(currState, currStateRow, currStateCol + 1));
+					}
+					if (currState.isOpen(currStateRow, currStateCol - 1)) {
+						stateStore.store(new TraceState(currState, currStateRow, currStateCol - 1));
+					}
 
 				}
 			}
-
-			
-
+			for (TraceState state : bestPaths) {
+				System.out.println(state.getBoard().toString());
+			}
 		} else if (argTwo == 'g') {
 			System.out.println("GUI not currently supported");
 			return;
@@ -119,9 +128,5 @@ public class CircuitTracer {
 			printUsage();
 			return;
 		}
-
-		// TODO: run the search for best paths
-		// TODO: output results to console or GUI, according to specified choice
 	}
-
 } // class CircuitTracer

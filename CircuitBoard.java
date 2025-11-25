@@ -45,7 +45,7 @@ public class CircuitBoard {
 	 * @throws FileNotFoundException      if Scanner cannot open or read the file
 	 * @throws InvalidFileFormatException for any file formatting or content issue
 	 */
-	public CircuitBoard(String filename) throws FileNotFoundException {
+	public CircuitBoard(String filename) throws FileNotFoundException, InvalidFileFormatException {
 		Scanner fileScan = new Scanner(new File(filename));
 		try {
 			if (fileScan.hasNextInt()) {
@@ -69,47 +69,49 @@ public class CircuitBoard {
 						continue;
 					}
 					if (currRow >= ROWS) {
-						throw new InvalidFileFormatException("more rows than expected");
+						throw new InvalidFileFormatException("More rows than expected.");
 					}
 					String[] charInLine = currentLine.trim().split("\\s+");
 
 					if (charInLine.length != COLS) {
-						throw new InvalidFileFormatException("incorrect number of chars expected");
+						throw new InvalidFileFormatException("Incorrect number of chars expected.");
 					}
 					for (int currColumn = 0; currColumn < COLS; currColumn++) {
 						String currChar = charInLine[currColumn];
 						if (currChar.length() != 1) {
-							throw new InvalidFileFormatException("improper spacing");
+							throw new InvalidFileFormatException("Improper spacing.");
 						}
 						char nextChar = currChar.charAt(0);
 						boolean isValid = switch (nextChar) {
-							case 'O', 'X', '1', '2' -> true;
+							case OPEN, CLOSED, START, END -> true;
 							default -> false;
 						};
-						if (nextChar == '1') {
+						if (nextChar == START) {
 							oneCount++;
 							if (oneCount > 1) {
-								throw new InvalidFileFormatException("too many one spaces");
+								throw new InvalidFileFormatException("Too many one spaces.");
 							}
+							startingPoint = new Point(currRow, currColumn);
 						}
-						if (nextChar == '2') {
+						if (nextChar == END) {
 							twoCount++;
 							if (twoCount > 1) {
-								throw new InvalidFileFormatException("too many two spaces");
+								throw new InvalidFileFormatException("Too many two spaces.");
 							}
+							endingPoint = new Point(currRow, currColumn);
 						}
 						if (!isValid) {
-							throw new InvalidFileFormatException("invalid character");
+							throw new InvalidFileFormatException("Invalid character.");
 						}
 						board[currRow][currColumn] = nextChar;
 					}
 					currRow++;
 				}
-				if (oneCount == 0 || twoCount == 0){
-					throw new InvalidFileFormatException("Missing 1 or 2 space on board");
+				if (oneCount == 0 || twoCount == 0) {
+					throw new InvalidFileFormatException("Missing 1 or 2 space on board.");
 				}
 				if (currRow != ROWS) {
-					throw new InvalidFileFormatException("fewer rows than expected");
+					throw new InvalidFileFormatException("Fewer rows than expected.");
 				}
 			} else {
 				throw new InvalidFileFormatException("First line is not in the correct 2 integer format.");
