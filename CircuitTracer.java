@@ -26,13 +26,13 @@ public class CircuitTracer {
 
 	/** Print instructions for running CircuitTracer from the command line. */
 	private void printUsage() {
-		System.out.println("######################################################################################");
+		// System.out.println("######################################################################################");
 		System.out.println("To Run The Program Please Follow The Following Argument Structure:");
 		System.out.println("<-StorageType> <-ProgramMode> <InputFileName>");
 		System.out.println("Storage Type Options:\n-s -- uses a stack, DFS\n-q -- uses a queue, BFS");
 		System.out.println("Program Mode Options:\n-c -- runs program in the console\n-g -- runs program in a GUI");
 		System.out.println("Example:\njava CircuitTracer -s -c inputFile.dat");
-		System.out.println("######################################################################################");
+		// System.out.println("######################################################################################");
 	}
 
 	/**
@@ -45,36 +45,28 @@ public class CircuitTracer {
 		CircuitBoard currBoard;
 		Storage<TraceState> stateStore;
 		ArrayList<TraceState> bestPaths;
-		if (args.length != 3) {
-			printUsage();
-			return; // exit the constructor immediately
-		}
-		// Storage Selection
-		char argOne = args[0].charAt(1);
-		if (argOne == 's') {
-			stateStore = Storage.getStackInstance();
-			bestPaths = new ArrayList<TraceState>();
-		} else if (argOne == 'q') {
-			stateStore = Storage.getQueueInstance();
-			bestPaths = new ArrayList<TraceState>();
-		} else {
-			System.out.println("Invalid storage argument");
-			printUsage();
-			return;
-		}
-		// File Reader
-		String argThree = args[2];
 		try {
+			if (args.length != 3) {
+				printUsage();
+				return; // exit the constructor immediately
+			}
+			// Storage Selection
+			char argOne = args[0].charAt(1);
+			if (argOne == 's') {
+				stateStore = Storage.getStackInstance();
+				bestPaths = new ArrayList<TraceState>();
+			} else if (argOne == 'q') {
+				stateStore = Storage.getQueueInstance();
+				bestPaths = new ArrayList<TraceState>();
+			} else {
+				System.out.println("Invalid storage argument");
+				printUsage();
+				return;
+			}
+			// File Reader
+			String argThree = args[2];
 			currBoard = new CircuitBoard(argThree);
-		} catch (FileNotFoundException e) {
-			System.out.println("Given file not found");
-			printUsage();
-			return;
-		}
-		;
-		// Graphics Mode Selection
-		char argTwo = args[1].charAt(1);
-		if (argTwo == 'c') {
+			// Read File
 			Point startPosition = currBoard.getStartingPoint();
 			int startColumn = (int) startPosition.getY();
 			int startRow = (int) startPosition.getX();
@@ -117,16 +109,22 @@ public class CircuitTracer {
 
 				}
 			}
-			for (TraceState state : bestPaths) {
-				System.out.println(state.getBoard().toString());
+			// Graphics Mode Selection
+			char argTwo = args[1].charAt(1);
+			if (argTwo == 'c') {
+				for (TraceState state : bestPaths) {
+					System.out.println(state.getBoard().toString());
+				}
+			} else if (argTwo == 'g') {
+				new CircuitTracerGUI(currBoard, bestPaths);
+			} else {
+				System.out.println("Invalid mode argument");
+				printUsage();
 			}
-		} else if (argTwo == 'g') {
-			System.out.println("GUI not currently supported");
-			return;
-		} else {
-			System.out.println("Invalid mode argument");
-			printUsage();
-			return;
+		} catch (InvalidFileFormatException e) {
+			System.out.println(e);
+		} catch (FileNotFoundException e) {
+			System.out.println(e);
 		}
 	}
 } // class CircuitTracer
