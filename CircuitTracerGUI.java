@@ -13,7 +13,12 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
-
+/**
+ * 
+ * Creates a GUI meant to display the best paths found by the algorithm ran in CircuitTracer
+ * 
+ * @author Broden
+ */
 public class CircuitTracerGUI extends JFrame {
     private JPanel currGridPanel;
     public CircuitTracerGUI(CircuitBoard currBoard, ArrayList<TraceState> bestPaths) {
@@ -47,6 +52,7 @@ public class CircuitTracerGUI extends JFrame {
             solutionPanel.add(solButton);
             i++;
         }
+        //Button to return to the original state
         JButton originalState = new JButton("Original");
         originalState.setBorderPainted(false);
         originalState.setContentAreaFilled(false);
@@ -61,6 +67,7 @@ public class CircuitTracerGUI extends JFrame {
             }
         });
         solutionPanel.add(originalState);
+        //Visual Modification
         solutionPanel.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
         this.add(solutionPanel, BorderLayout.WEST);
         //Creates the beginning state of the frame
@@ -97,11 +104,12 @@ public class CircuitTracerGUI extends JFrame {
         return gridPanel;
     }
     /**
-     * 
-     * @param bestState
-     * @param rows
-     * @param cols
-     * @return
+     * Converts TraceState into a board and then converts the board into 
+     * a JPanel representation compaosed of multiple JLabels
+     * @param bestState StateTrace that is being converted to GUI
+     * @param rows rows in the StateTrace being converted to GUI
+     * @param cols columns in the board being converted to GUI
+     * @return JPanel containing JLabels to reflect the input board
      */
     private JPanel GridPanelMaker(TraceState bestState, int rows, int cols) {
         CircuitBoard stateBoard = bestState.getBoard();

@@ -48,6 +48,7 @@ public class CircuitBoard {
 	public CircuitBoard(String filename) throws FileNotFoundException, InvalidFileFormatException {
 		Scanner fileScan = new Scanner(new File(filename));
 		try {
+			//Checks first two tokens to see if they are int and assigns them to ROWS and COLS
 			if (fileScan.hasNextInt()) {
 				ROWS = fileScan.nextInt();
 				if (fileScan.hasNextInt()) {
@@ -58,11 +59,13 @@ public class CircuitBoard {
 			} else {
 				throw (new InvalidFileFormatException("One or both of the integers are not of integer type."));
 			}
+			//Creates a 2d char array
 			board = new char[ROWS][COLS];
 			int currRow = 0;
 			if (ROWS > 0 && COLS > 0) {
 				int oneCount = 0;
 				int twoCount = 0;
+				//Goes through the file and adds each element to the array in the appropriate index
 				while (fileScan.hasNextLine()) {
 					String currentLine = fileScan.nextLine();
 					if (currentLine.trim().isEmpty()) {
@@ -86,6 +89,7 @@ public class CircuitBoard {
 							case OPEN, CLOSED, START, END -> true;
 							default -> false;
 						};
+						//Counts start and end chars to ensure only one of each exist, also used to get the start and end points
 						if (nextChar == START) {
 							oneCount++;
 							if (oneCount > 1) {
