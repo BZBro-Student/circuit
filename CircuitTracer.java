@@ -116,7 +116,7 @@ public class CircuitTracer {
 					System.out.println(state.getBoard().toString());
 				}
 			} else if (argTwo == 'g') {
-				//Creates GUI object which opens a frame automatically
+				// Creates GUI object which opens a frame automatically
 				new CircuitTracerGUI(currBoard, bestPaths);
 			} else {
 				System.out.println("Invalid mode argument");

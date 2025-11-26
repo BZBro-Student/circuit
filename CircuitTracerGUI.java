@@ -13,14 +13,17 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
+
 /**
  * 
- * Creates a GUI meant to display the best paths found by the algorithm ran in CircuitTracer
+ * Creates a GUI meant to display the best paths found by the algorithm ran in
+ * CircuitTracer
  * 
  * @author Broden
  */
 public class CircuitTracerGUI extends JFrame {
     private JPanel currGridPanel;
+
     public CircuitTracerGUI(CircuitBoard currBoard, ArrayList<TraceState> bestPaths) {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLayout(new BorderLayout());
@@ -37,7 +40,8 @@ public class CircuitTracerGUI extends JFrame {
             JButton solButton = new JButton("Solution " + i);
             solButton.setBorderPainted(false);
             solButton.setContentAreaFilled(false);
-            // Add listener to each button that will cause the GridPanel to update to reflect the chosen solution
+            // Add listener to each button that will cause the GridPanel to update to
+            // reflect the chosen solution
             solButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -52,7 +56,7 @@ public class CircuitTracerGUI extends JFrame {
             solutionPanel.add(solButton);
             i++;
         }
-        //Button to return to the original state
+        // Button to return to the original state
         JButton originalState = new JButton("Original");
         originalState.setBorderPainted(false);
         originalState.setContentAreaFilled(false);
@@ -67,21 +71,22 @@ public class CircuitTracerGUI extends JFrame {
             }
         });
         solutionPanel.add(originalState);
-        //Visual Modification
+        // Visual Modification
         solutionPanel.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED));
         this.add(solutionPanel, BorderLayout.WEST);
-        //Creates the beginning state of the frame
+        // Creates the beginning state of the frame
         this.pack();
         this.setSize(800, 600);
         this.setVisible(true);
     }
+
     /**
      * Converts currBoard into a JPanel representation of the board, this panel
      * is composed of multiple JLabels
      * 
      * @param currBoard Board that is being converted to GUI
-     * @param rows rows in the board being converted to GUI
-     * @param cols columns in the board being converted to GUI
+     * @param rows      rows in the board being converted to GUI
+     * @param cols      columns in the board being converted to GUI
      * @return JPanel containing JLabels to reflect the input board
      */
     private JPanel GridPanelMaker(CircuitBoard currBoard, int rows, int cols) {
@@ -89,7 +94,7 @@ public class CircuitTracerGUI extends JFrame {
         gridPanel.setLayout(new GridLayout(rows, cols));
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
-                Font labelFont = new Font("Arial",Font.BOLD, 24);
+                Font labelFont = new Font("Arial", Font.BOLD, 24);
                 char currChar = currBoard.charAt(i, j);
                 JLabel currLabel = new JLabel(String.valueOf(currChar), SwingConstants.CENTER);
                 currLabel.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED));
@@ -103,12 +108,14 @@ public class CircuitTracerGUI extends JFrame {
         }
         return gridPanel;
     }
+
     /**
-     * Converts TraceState into a board and then converts the board into 
+     * Converts TraceState into a board and then converts the board into
      * a JPanel representation compaosed of multiple JLabels
+     * 
      * @param bestState StateTrace that is being converted to GUI
-     * @param rows rows in the StateTrace being converted to GUI
-     * @param cols columns in the board being converted to GUI
+     * @param rows      rows in the StateTrace being converted to GUI
+     * @param cols      columns in the board being converted to GUI
      * @return JPanel containing JLabels to reflect the input board
      */
     private JPanel GridPanelMaker(TraceState bestState, int rows, int cols) {
